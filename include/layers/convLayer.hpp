@@ -1,9 +1,11 @@
 #ifndef CONVLAYER_H
-#def CONVLAYER_H
+#define CONVLAYER_H
+
+typedef Eigen::MatrixXd Matrix;
 
 class ConvLayer : public Layer {
-	void FeedForward() {};
-	void FeedBackward() {};
+	Matrix FeedForward(Matrix mat) {};
+	Matrix FeedBackward(Matrix mat) {};
 };
 
 #endif

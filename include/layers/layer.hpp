@@ -1,11 +1,15 @@
 #ifndef LAYER_H
-#def LAYER_H
+#define LAYER_H
+
+#include <Eigen/Dense>
+
+typedef Eigen::MatrixXd Matrix;
 
 class Layer {
-	public:
+public:
 	virtual ~Layer() {};
-	virtual void FeedForward() = 0;
-	virtual void FeedBackward() = 0;
+	virtual Matrix FeedForward(Matrix mat) = 0;
+	virtual Matrix FeedBackward(Matrix mat) = 0;
 };
 
 #endif
