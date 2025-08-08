@@ -10,9 +10,10 @@ Eigen::MatrixXd generateTestMatrix() {
 
 TEST(ReLUForwardPass, PositiveAndNegativeValues) {
 	Eigen::MatrixXd mat = generateTestMatrix();
-	ReLULayer layer;
 
-	Eigen::MatrixXd result = layer.FeedForward(mat); 
+	ReLULayer layer;
+	Eigen::MatrixXd result = layer.FeedForward(mat);
+
 	Eigen::MatrixXd expected(2,2);
 	expected << 3, 0, 0, 0;
 
@@ -22,7 +23,7 @@ TEST(ReLUForwardPass, PositiveAndNegativeValues) {
 TEST(ReLUBackwardPass, PositiveAndNegativeValues) {
 	Eigen::MatrixXd mat = generateTestMatrix();
 
-	ReLULayer layer{};
+	ReLULayer layer;
 	Eigen::MatrixXd result = layer.FeedBackward(mat); 
 	Eigen::MatrixXd expected(2,2);
 	expected << 1, 0, 0, 0;

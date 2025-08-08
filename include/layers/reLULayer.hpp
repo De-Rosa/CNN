@@ -16,11 +16,11 @@ typedef Eigen::MatrixXd Matrix;
 
 class ReLULayer : public Layer {
 public:
-	Matrix FeedForward(Matrix mat) {
+	Matrix FeedForward(Matrix& mat) {
 		return mat.unaryExpr(&ReLU);
 	};
 
-	Matrix FeedBackward(Matrix mat) {
+	Matrix FeedBackward(Matrix& mat) {
 		return mat.unaryExpr(&ReLUDerivative);
 	};
 };
