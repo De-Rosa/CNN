@@ -34,12 +34,12 @@ public:
 		adamVars.grads.biases.setZero();
 	}
 
-	WeightBias& GetParameters() {
-		return parameters;
-	}
-
 	void Optimise(Optimiser& optimiser) override {
 		optimiser.Update(*this);
+	}
+
+	WeightBias& GetParameters() {
+		return parameters;
 	}
 };
 
