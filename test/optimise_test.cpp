@@ -6,6 +6,7 @@
 #include "layers/denseLayer.hpp"
 #include "layers/reLULayer.hpp"
 #include "optimisers/adam.hpp"
+#include "optimisers/sgd.hpp"
 #include <gtest/gtest.h>
 
 double MSELoss(const Matrix& pred, const Matrix& target) {
@@ -16,7 +17,7 @@ Matrix MSELossBackward(const Matrix& pred, const Matrix& target) {
 	return 2.0 * (pred - target) / pred.rows();
 }
 
-double Train(Network& network, AdamOptimiser& adam, Matrix& inputs, Matrix& expected, int maxEpochs = 5000, int outputInterval = 500) {
+double Train(Network& network, Optimiser& optimiser, Matrix& inputs, Matrix& expected, int maxEpochs = 5000) {
 	double loss = 0.0;
 
 	for (int epoch = 1; epoch <= maxEpochs; epoch++) {
@@ -29,26 +30,25 @@ double Train(Network& network, AdamOptimiser& adam, Matrix& inputs, Matrix& expe
 		auto grad = network.FeedBackward(loss_grad);
 
 		// update weights
-		network.Optimise(adam);
+		network.Optimise(optimiser);
 
 		// zero gradients
 		network.ZeroGradients();	
-
-		if (epoch % outputInterval == 0) {
-			std::cout << "Epoch " << epoch << ", Loss: " << loss << std::endl;
-		}
 	}
 
 	return loss;
 }
 
-TEST(OptimiseTest, TrainsToFitLinearFunction) {
+Network CreateTestNetwork(int hiddenSize = 10) {
 	Layers layers;
-	layers.push_back(std::make_unique<DenseLayer>(1,10));
+	layers.push_back(std::make_unique<DenseLayer>(1,hiddenSize));
 	layers.push_back(std::make_unique<ReLULayer>());
-	layers.push_back(std::make_unique<DenseLayer>(10,1));
-	Network network(std::move(layers));
+	layers.push_back(std::make_unique<DenseLayer>(hiddenSize,1));
+	return Network(std::move(layers));
+}
 
+TEST(OptimiseTestAdam, TrainsToFitLinearFunction) {
+	Network network = CreateTestNetwork();	
 	AdamOptimiser adam;
 
 	// estimating function 2x + 3 
@@ -58,6 +58,7 @@ TEST(OptimiseTest, TrainsToFitLinearFunction) {
 
 	// train
 	double loss = Train(network, adam, inputs, expected);
+	std::cout << "Adam Loss (Linear): " << loss << std::endl;
 
 	// assert loss is low
 	ASSERT_LT(loss, 0.01);
@@ -69,19 +70,40 @@ TEST(OptimiseTest, TrainsToFitLinearFunction) {
 	Matrix expectedOutputs(3,1);
 	expectedOutputs << -7, 3, 13;
 
-	std::cout << "Test output " << testOutput << std::endl;
+	// predictions are within +-0.5
+	ASSERT_TRUE(testOutput.isApprox(expectedOutputs, 0.5));
+}
+
+
+TEST(OptimiseTestSGD, TrainsToFitLinearFunction) {
+	Network network = CreateTestNetwork();	
+	SGDOptimiser sgd;
+
+	// estimating function 2x + 3 
+	int sampleCount = 100;
+	Matrix inputs = Matrix::Random(sampleCount, 1) * 10; 
+	Matrix expected = 2 * inputs.array() + 3;
+
+	// train
+	double loss = Train(network, sgd, inputs, expected);
+	std::cout << "SGD Loss (Linear): " << loss << std::endl;
+
+	// assert loss is low
+	ASSERT_LT(loss, 0.01);
+
+	Matrix testInputs(3,1);
+	testInputs << -5, 0, 5;
+	auto testOutput = network.FeedForward(testInputs);
+
+	Matrix expectedOutputs(3,1);
+	expectedOutputs << -7, 3, 13;
 
 	// predictions are within +-0.5
 	ASSERT_TRUE(testOutput.isApprox(expectedOutputs, 0.5));
 }
 
-TEST(OptimiseTest, TrainsToFitQuadraticFunction) {
-	Layers layers;
-	layers.push_back(std::make_unique<DenseLayer>(1, 20));
-	layers.push_back(std::make_unique<ReLULayer>());
-	layers.push_back(std::make_unique<DenseLayer>(20, 1));
-	Network network(std::move(layers));
-
+TEST(OptimiseTestAdam, TrainsToFitQuadraticFunction) {
+	Network network = CreateTestNetwork(20);
 	AdamOptimiser adam;
 
 	// estimating function 3x^2 - 2x + 1
@@ -91,6 +113,7 @@ TEST(OptimiseTest, TrainsToFitQuadraticFunction) {
 
 	// train
 	double loss = Train(network, adam, inputs, expected, 10000);
+	std::cout << "Adam Loss (Quadratic): " << loss << std::endl;
 
 	// assert loss is low
 	ASSERT_LT(loss, 0.075); 
@@ -102,8 +125,6 @@ TEST(OptimiseTest, TrainsToFitQuadraticFunction) {
 	Matrix expectedOutputs(5,1);
 	expectedOutputs << 34, 6, 1, 2, 22;
 	
-	std::cout << "Test output " << testOutput << std::endl;
-
 	// predictions are within +-0.5
 	ASSERT_TRUE(testOutput.isApprox(expectedOutputs, 0.5));
 }
