@@ -1,55 +1,46 @@
 #ifndef DENSELAYER_H 
 #define DENSELAYER_H
 
-#include <layers/layer.hpp>
-#include <hyperparameters.hpp>
-#include <algorithm>
+#include <layers/adamLayer.hpp>
+#include <optimisers/optimiser.hpp>
+#include <stdexcept>
 
-typedef Eigen::MatrixXd Matrix;
-
-struct WeightBias {
-	Matrix weights;
-	Matrix biases;
-
-	WeightBias(int inputDim, int outputDim, double initValue) {
-		if (inputDim <= 0 || outputDim <= 0) return;
-		weights = Matrix::Constant(inputDim, outputDim, initValue);
-		biases = Matrix::Constant(1, outputDim, initValue);
-	}
-};
-
-struct AdamVariables {
-	WeightBias grads; // dl/dw, dl/db
-	WeightBias m; // first moment
-	WeightBias v; // second moment
-	
-	AdamVariables(int inputDim, int outputDim)
-	: grads(inputDim, outputDim, 0),
-	  m(inputDim, outputDim, 0),
-	  v(inputDim, outputDim, 0) {}
-};
-
-class DenseLayer : public Layer {
+class DenseLayer : public AdamLayer {
 	WeightBias parameters;
-	AdamVariables adamVars;
-
 public:
 	DenseLayer(int inputDim, int outputDim) 
-	: adamVars(inputDim, outputDim)
+	: AdamLayer(inputDim, outputDim),
+	  parameters(inputDim, outputDim, 0)
 	{
 		parameters.weights = Matrix::Random(inputDim, outputDim) * 0.01;
 		parameters.biases = Matrix::Zero(1, outputDim);
 	};
 
-	Matrix FeedForward(Matrix& mat) {
-		return (mat * parameters.weights) + parameters.biases;
+	Matrix FeedForward(Matrix& mat) override {
+		Matrix z = mat * parameters.weights;
+		Matrix biases_replicated = parameters.biases.replicate(mat.rows(), 1);
+
+		return z + biases_replicated;
 	};
 
-	Matrix FeedBackward(Matrix& mat, Matrix& grad) {
+	Matrix FeedBackward(Matrix& mat, Matrix& grad) override {
 		adamVars.grads.weights = mat.transpose() * grad;
 		adamVars.grads.biases = grad.colwise().sum();
 		return grad * parameters.weights.transpose();
 	};
+
+	void ZeroGradients() override {
+		adamVars.grads.weights.setZero();
+		adamVars.grads.biases.setZero();
+	}
+
+	WeightBias& GetParameters() {
+		return parameters;
+	}
+
+	void Optimise(Optimiser& optimiser) override {
+		optimiser.Update(*this);
+	}
 };
 
 #endif

@@ -22,9 +22,11 @@ TEST(ReLUForwardPass, PositiveAndNegativeValues) {
 
 TEST(ReLUBackwardPass, PositiveAndNegativeValues) {
 	Eigen::MatrixXd mat = generateTestMatrix();
+	Eigen::MatrixXd grad(2,2);
+	grad << 1, 1, 1, 1;
 
 	ReLULayer layer;
-	Eigen::MatrixXd result = layer.FeedBackward(mat); 
+	Eigen::MatrixXd result = layer.FeedBackward(mat, grad); 
 	Eigen::MatrixXd expected(2,2);
 	expected << 1, 0, 0, 0;
 
