@@ -11,7 +11,13 @@ file(GLOB_RECURSE SRC_FILES
     src/*.cpp
 )
 
-add_executable(cnn ${SRC_FILES})
+# for lib
+list(REMOVE_ITEM SRC_FILES ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp)
+
+add_library(lib ${SRC_FILES})
+
+add_executable(cnn src/main.cpp ${SRC_FILES})
+target_link_libraries(cnn PRIVATE lib)
 
 include(FetchContent)
 FetchContent_Declare(

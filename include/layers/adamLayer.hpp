@@ -7,13 +7,8 @@ struct WeightBias {
 	Matrix weights;
 	Matrix biases;
 
-	WeightBias() = default;
-
-	WeightBias(int inputDim, int outputDim, double initValue) {
-		if (inputDim <= 0 || outputDim <= 0) throw std::runtime_error("invalid dimensions");
-		weights = Matrix::Constant(inputDim, outputDim, initValue);
-		biases = Matrix::Constant(1, outputDim, initValue);
-	}
+	WeightBias();
+	WeightBias(int inputDim, int outputDim, double initValue);
 };
 
 struct AdamVariables {
@@ -21,18 +16,14 @@ struct AdamVariables {
 	WeightBias m; // first moment
 	WeightBias v; // second moment
 	
-	AdamVariables(int inputDim, int outputDim)
-	: grads(inputDim, outputDim, 0),
-	  m(inputDim, outputDim, 0),
-	  v(inputDim, outputDim, 0) {}
+	AdamVariables(int inputDim, int outputDim);
 };
 
 class AdamLayer : public Layer {
 protected:
 	AdamVariables adamVars;
 public: 
-	AdamLayer(int inputDim, int outputDim)
-	: adamVars(inputDim, outputDim) {}
+	AdamLayer(int inputDim, int outputDim);
 
 	AdamVariables& GetAdamVars() {
 		return adamVars;

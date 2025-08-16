@@ -13,42 +13,14 @@ class Network {
 	std::vector<Matrix> cache;
 
 public:
-	Network(Layers&& layers) 
-	: layers(std::move(layers)) {}
+	Network(Layers&& layers);
 
-	Matrix FeedForward(Matrix& mat) { 
-		// cached layer at index i is input to layer i during forward propagation
-		cache.clear();
-		cache.push_back(mat);
+	Matrix FeedForward(Matrix& mat);
+	Matrix FeedBackward(Matrix& grad);
 
-		Matrix current = mat;
-		for (auto& layer : layers) {
-			current = layer->FeedForward(current);
-			cache.push_back(current);
-		}
+	void Optimise(Optimiser& optimiser);
 
-		return current;
-	};
-
-	Matrix FeedBackward(Matrix& grad) {
-		Matrix current = grad;
-		for (int i = layers.size() - 1; i >= 0; --i) {
-			current = layers[i]->FeedBackward(cache[i], current);
-		}
-		return current;
-	};
-
-	void Optimise(Optimiser& optimiser) {
-		for (auto& layer : layers) {
-			layer->Optimise(optimiser);
-		}
-	}
-
-	void ZeroGradients() {
-		for (auto& layer : layers) {
-			layer->ZeroGradients();
-		}
-	}
+	void ZeroGradients();
 };
 
 #endif

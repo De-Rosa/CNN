@@ -1,7 +1,8 @@
 # CNN
 ## Building
 In the `build` directory, run:
-```cmake ..
+```
+cmake ..
 make
 ```
 ## Testing

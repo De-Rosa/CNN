@@ -7,11 +7,10 @@ class MaxPoolingLayer : public Layer {
 private:
 	int size, stride;
 public:
-	MaxPoolingLayer(int size, int stride) 
-	: size(size), stride(stride) {};
-	Matrix FeedForward(Matrix mat) {
-	};
-	Matrix FeedBackward(Matrix mat) {};
+	MaxPoolingLayer(int size, int stride);
+
+	Matrix FeedForward(Matrix mat);
+	Matrix FeedBackward(Matrix mat);
 };
 
 #endif

@@ -3,16 +3,19 @@
 
 #include <Eigen/Dense>
 
-typedef Eigen::MatrixXd Matrix;
+using Matrix = Eigen::MatrixXd;
 
 class Optimiser;
 
 class Layer {
 public:
 	virtual ~Layer() {};
+
 	virtual Matrix FeedForward(Matrix& mat) = 0;
 	virtual Matrix FeedBackward(Matrix& mat, Matrix& grad) = 0;
+
 	virtual void ZeroGradients() {}
+
 	virtual void Optimise(Optimiser& optimiser) {}
 };
 
