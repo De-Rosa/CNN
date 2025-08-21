@@ -1,9 +1,9 @@
-#ifndef RELULAYER_H
-#define RELULAYER_H
+#ifndef SOFTMAXLAYER_H
+#define SOFTMAXLAYER_H
 
 #include "layers/layer.hpp"
 
-class ReLULayer : public Layer {
+class SoftmaxLayer : public Layer {
 public:
 	Matrix FeedForward(Matrix& mat) override;
 	Matrix FeedBackward(Matrix& mat, Matrix& grad) override;

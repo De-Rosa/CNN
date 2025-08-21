@@ -1,9 +1,6 @@
 #ifndef OPTIMISERS_H 
 #define OPTIMISERS_H
 
-#include <algorithm>
-#include <cmath>
-
 class DenseLayer;
 
 class Optimiser {

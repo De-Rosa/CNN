@@ -1,45 +1,46 @@
 #ifndef DENSELAYER_H 
 #define DENSELAYER_H
 
-#include <layers/adamLayer.hpp>
-#include <optimisers/optimiser.hpp>
-#include <stdexcept>
+#include "layers/layer.hpp"
+#include "optimisers/optimiser.hpp"
 
-class DenseLayer : public AdamLayer {
+struct WeightBias {
+	Matrix weights;
+	Matrix biases;
+
+	WeightBias();
+	WeightBias(int inputDim, int outputDim, double initValue);
+};
+
+class DenseLayer : public Layer {
+	int inputDim, outputDim;
 	WeightBias parameters;
+	WeightBias gradients;
+
 public:
-	DenseLayer(int inputDim, int outputDim) 
-	: AdamLayer(inputDim, outputDim),
-	  parameters(inputDim, outputDim, 0)
-	{
-		parameters.weights = Matrix::Random(inputDim, outputDim) * 0.01;
-		parameters.biases = Matrix::Zero(1, outputDim);
-	};
+	DenseLayer(int inputDim, int outputDim);
 
-	Matrix FeedForward(Matrix& mat) override {
-		Matrix z = mat * parameters.weights;
-		Matrix biases_replicated = parameters.biases.replicate(mat.rows(), 1);
+	Matrix FeedForward(Matrix& mat) override;
+	Matrix FeedBackward(Matrix& mat, Matrix& grad) override;
 
-		return z + biases_replicated;
-	};
+	void Optimise(Optimiser& optimiser) override;
 
-	Matrix FeedBackward(Matrix& mat, Matrix& grad) override {
-		adamVars.grads.weights = mat.transpose() * grad;
-		adamVars.grads.biases = grad.colwise().sum();
-		return grad * parameters.weights.transpose();
-	};
-
-	void ZeroGradients() override {
-		adamVars.grads.weights.setZero();
-		adamVars.grads.biases.setZero();
-	}
+	void ZeroGradients() override;
 
 	WeightBias& GetParameters() {
 		return parameters;
 	}
 
-	void Optimise(Optimiser& optimiser) override {
-		optimiser.Update(*this);
+	WeightBias& GetGradients() {
+		return gradients;
+	}
+
+	int GetInputDim() {
+		return inputDim;
+	}
+
+	int GetOutputDim() {
+		return outputDim;
 	}
 };
 
