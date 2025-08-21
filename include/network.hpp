@@ -1,9 +1,9 @@
 #ifndef NETWORK_H 
 #define NETWORK_H
 
-#include <layers/layer.hpp>
-#include <hyperparameters.hpp>
-#include <optimisers/optimiser.hpp>
+#include "layers/layer.hpp"
+#include "hyperparameters.hpp"
+#include "optimisers/optimiser.hpp"
 #include <memory>
 
 using Layers = std::vector<std::unique_ptr<Layer>>;

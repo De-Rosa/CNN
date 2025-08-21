@@ -41,9 +41,9 @@ double Train(Network& network, Optimiser& optimiser, Matrix& inputs, Matrix& exp
 
 Network CreateTestNetwork(int hiddenSize = 10) {
 	Layers layers;
-	layers.push_back(std::make_unique<DenseLayer>(1,hiddenSize));
+	layers.push_back(std::make_unique<DenseLayer>(1, hiddenSize));
 	layers.push_back(std::make_unique<ReLULayer>());
-	layers.push_back(std::make_unique<DenseLayer>(hiddenSize,1));
+	layers.push_back(std::make_unique<DenseLayer>(hiddenSize, 1));
 	return Network(std::move(layers));
 }
 
@@ -91,11 +91,11 @@ TEST(OptimiseTestSGD, TrainsToFitLinearFunction) {
 	// assert loss is low
 	ASSERT_LT(loss, 0.01);
 
-	Matrix testInputs(3,1);
+	Matrix testInputs(3, 1);
 	testInputs << -5, 0, 5;
 	auto testOutput = network.FeedForward(testInputs);
 
-	Matrix expectedOutputs(3,1);
+	Matrix expectedOutputs(3, 1);
 	expectedOutputs << -7, 3, 13;
 
 	// predictions are within +-0.5
@@ -118,11 +118,11 @@ TEST(OptimiseTestAdam, TrainsToFitQuadraticFunction) {
 	// assert loss is low
 	ASSERT_LT(loss, 0.075); 
 
-	Matrix testInputs(5,1);
+	Matrix testInputs(5, 1);
 	testInputs << -3, -1, 0, 1, 3;
 	auto testOutput = network.FeedForward(testInputs);
 
-	Matrix expectedOutputs(5,1);
+	Matrix expectedOutputs(5, 1);
 	expectedOutputs << 34, 6, 1, 2, 22;
 	
 	// predictions are within +-0.5

@@ -1,11 +1,22 @@
 #ifndef DENSELAYER_H 
 #define DENSELAYER_H
 
-#include <layers/adamLayer.hpp>
-#include <optimisers/optimiser.hpp>
+#include "layers/layer.hpp"
+#include "optimisers/optimiser.hpp"
 
-class DenseLayer : public AdamLayer {
+struct WeightBias {
+	Matrix weights;
+	Matrix biases;
+
+	WeightBias();
+	WeightBias(int inputDim, int outputDim, double initValue);
+};
+
+class DenseLayer : public Layer {
+	int inputDim, outputDim;
 	WeightBias parameters;
+	WeightBias gradients;
+
 public:
 	DenseLayer(int inputDim, int outputDim);
 
@@ -18,6 +29,18 @@ public:
 
 	WeightBias& GetParameters() {
 		return parameters;
+	}
+
+	WeightBias& GetGradients() {
+		return gradients;
+	}
+
+	int GetInputDim() {
+		return inputDim;
+	}
+
+	int GetOutputDim() {
+		return outputDim;
 	}
 };
 

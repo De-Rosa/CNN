@@ -1,8 +1,8 @@
 #ifndef SGD_H 
 #define SGD_H
 
-#include <layers/denseLayer.hpp>
-#include <optimisers/optimiser.hpp>
+#include "layers/denseLayer.hpp"
+#include "optimisers/optimiser.hpp"
 
 // Stochastic Gradient Descent
 class SGDOptimiser : public Optimiser {

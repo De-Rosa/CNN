@@ -6,8 +6,8 @@ SGDOptimiser::SGDOptimiser(double stepSize)
 
 void SGDOptimiser::Update(DenseLayer& denseLayer) {
     WeightBias& parameters = denseLayer.GetParameters();
-    AdamVariables& vars = denseLayer.GetAdamVars();
+    WeightBias& grads = denseLayer.GetGradients();
 
-    parameters.weights -= stepSize * vars.grads.weights;
-    parameters.biases -= stepSize * vars.grads.biases;
+    parameters.weights -= stepSize * grads.weights;
+    parameters.biases -= stepSize * grads.biases;
 }

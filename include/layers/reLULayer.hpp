@@ -1,7 +1,7 @@
 #ifndef RELULAYER_H
 #define RELULAYER_H
 
-#include <layers/layer.hpp>
+#include "layers/layer.hpp"
 
 class ReLULayer : public Layer {
 public:
