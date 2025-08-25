@@ -5,8 +5,8 @@
 
 class SoftmaxLayer : public Layer {
 public:
-	Matrix FeedForward(Matrix& mat) override;
-	Matrix FeedBackward(Matrix& mat, Matrix& grad) override;
+	Matrix FeedForward(const Matrix& mat) const override;
+	Matrix FeedBackward(const Matrix& mat, const Matrix& grad) override;
 };
 
 #endif

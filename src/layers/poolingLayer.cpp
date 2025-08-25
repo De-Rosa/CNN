@@ -8,7 +8,7 @@ MaxPoolingLayer::MaxPoolingLayer(int size, int stride)
 
 
 // https://blog.mlreview.com/a-guide-to-receptive-field-arithmetic-for-convolutional-neural-networks-e0f514068807
-Matrix MaxPoolingLayer::FeedForward(Matrix& mat) {
+Matrix MaxPoolingLayer::FeedForward(const Matrix& mat) const {
 	if (size > mat.rows() || size > mat.cols()) throw std::runtime_error("kernel size of pooling layer too large for input matrix");
 
 	// no padding, will cut off edges (valid pooling)
@@ -26,7 +26,7 @@ Matrix MaxPoolingLayer::FeedForward(Matrix& mat) {
 	return outputMatrix;
 }
 
-Matrix MaxPoolingLayer::FeedBackward(Matrix& mat, Matrix& grad) {
+Matrix MaxPoolingLayer::FeedBackward(const Matrix& mat, const Matrix& grad) {
 	if (size > mat.rows() || size > mat.cols()) throw std::runtime_error("kernel size of pooling layer too large for input matrix");
 
 	int outputHeight = ((mat.rows() - size) / stride) + 1;

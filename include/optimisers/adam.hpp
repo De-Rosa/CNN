@@ -14,12 +14,12 @@ struct AdamState {
 
 class AdamOptimiser : public Optimiser {
 	std::unordered_map<DenseLayer*, AdamState> states;
-	double decay1, decay2, stepSize, epsilon;
+	const double decay1, decay2, stepSize, epsilon;
 	int time = 0;
-public:
-	AdamOptimiser(double decay1 = 0.9, double decay2 = 0.999, double stepSize = 0.001, double epsilon = 1e-8);
 
 	AdamState& GetState(DenseLayer& denseLayer);
+public:
+	AdamOptimiser(double decay1 = 0.9, double decay2 = 0.999, double stepSize = 0.001, double epsilon = 1e-8);
 	
 	void Update(DenseLayer& denseLayer);
 };

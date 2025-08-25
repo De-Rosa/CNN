@@ -5,12 +5,12 @@
 
 class MaxPoolingLayer : public Layer {
 private:
-	int size, stride;
+	const int size, stride;
 public:
 	MaxPoolingLayer(int size, int stride);
 
-	Matrix FeedForward(Matrix& mat);
-	Matrix FeedBackward(Matrix& mat, Matrix& grad);
+	Matrix FeedForward(const Matrix& mat) const;
+	Matrix FeedBackward(const Matrix& mat, const Matrix& grad);
 };
 
 #endif

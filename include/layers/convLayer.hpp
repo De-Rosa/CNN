@@ -4,8 +4,8 @@
 #include "layers/layer.hpp"
 
 class ConvLayer : public Layer {
-	Matrix FeedForward(Matrix& mat);
-	Matrix FeedBackward(Matrix& mat, Matrix& grad);
+	Matrix FeedForward(const Matrix& mat) const;
+	Matrix FeedBackward(const Matrix& mat, const Matrix& grad);
 };
 
 #endif

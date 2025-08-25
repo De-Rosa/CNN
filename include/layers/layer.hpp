@@ -11,8 +11,8 @@ class Layer {
 public:
 	virtual ~Layer() {};
 
-	virtual Matrix FeedForward(Matrix& mat) = 0;
-	virtual Matrix FeedBackward(Matrix& mat, Matrix& grad) = 0;
+	virtual Matrix FeedForward(const Matrix& mat) const = 0;
+	virtual Matrix FeedBackward(const Matrix& mat, const Matrix& grad) = 0;
 
 	virtual void ZeroGradients() {}
 

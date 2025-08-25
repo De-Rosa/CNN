@@ -9,14 +9,14 @@
 using Layers = std::vector<std::unique_ptr<Layer>>;
 
 class Network {
-	Layers layers;
+	const Layers layers;
 	std::vector<Matrix> cache;
 
 public:
 	Network(Layers&& layers);
 
-	Matrix FeedForward(Matrix& mat);
-	Matrix FeedBackward(Matrix& grad);
+	Matrix FeedForward(const Matrix& mat);
+	Matrix FeedBackward(const Matrix& grad);
 
 	void Optimise(Optimiser& optimiser);
 

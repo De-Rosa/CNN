@@ -5,7 +5,7 @@ Network::Network(Layers&& layers)
         : layers(std::move(layers))
 {}
 
-Matrix Network::FeedForward(Matrix& mat) { 
+Matrix Network::FeedForward(const Matrix& mat) { 
     // cached layer at index i is input to layer i during forward propagation
     cache.clear();
     cache.push_back(mat);
@@ -19,7 +19,7 @@ Matrix Network::FeedForward(Matrix& mat) {
     return current;
 };
 
-Matrix Network::FeedBackward(Matrix& grad) {
+Matrix Network::FeedBackward(const Matrix& grad) {
     Matrix current = grad;
     for (int i = layers.size() - 1; i >= 0; --i) {
         current = layers[i]->FeedBackward(cache[i], current);

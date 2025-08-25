@@ -9,11 +9,11 @@ inline double ReLUDerivative(double x) {
 	return x > 0.0;
 }
 
-Matrix ReLULayer::FeedForward(Matrix& mat) {
+Matrix ReLULayer::FeedForward(const Matrix& mat) const {
     return mat.unaryExpr(&ReLU);
 };
 
-Matrix ReLULayer::FeedBackward(Matrix& mat, Matrix& grad) {
+Matrix ReLULayer::FeedBackward(const Matrix& mat, const Matrix& grad) {
     Matrix mask = mat.unaryExpr(&ReLUDerivative);
     return (grad.array() * mask.array()).matrix();
 };

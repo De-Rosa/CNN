@@ -26,7 +26,7 @@ DenseLayer::DenseLayer(int inputDim, int outputDim)
     parameters.biases = Matrix::Zero(1, outputDim);
 };
 
-Matrix DenseLayer::FeedForward(Matrix& mat) {
+Matrix DenseLayer::FeedForward(const Matrix& mat) const {
     Matrix z = mat * parameters.weights;
 
     // https://stackoverflow.com/questions/35280290/replicate-a-column-vectorxd-in-order-to-construct-a-matrixxd-in-eigen-c
@@ -36,7 +36,7 @@ Matrix DenseLayer::FeedForward(Matrix& mat) {
     return z + replicatedBiases;
 };
 
-Matrix DenseLayer::FeedBackward(Matrix& mat, Matrix& grad) {
+Matrix DenseLayer::FeedBackward(const Matrix& mat, const Matrix& grad) {
     gradients.weights = mat.transpose() * grad;
     gradients.biases = grad.colwise().sum();
 

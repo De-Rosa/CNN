@@ -6,7 +6,7 @@
 
 // Stochastic Gradient Descent
 class SGDOptimiser : public Optimiser {
-	double stepSize;
+	const double stepSize;
 public:
 	SGDOptimiser(double stepSize = 0.001);
 
