@@ -1,4 +1,5 @@
 #include "layers/reLULayer.hpp"
+
 #include <algorithm>
 
 inline double ReLU(double x) {

@@ -1,4 +1,5 @@
 #include "layers/denseLayer.hpp"
+
 #include <stdexcept>
 
 WeightBias::WeightBias() = default;

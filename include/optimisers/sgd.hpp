@@ -1,16 +1,18 @@
 #ifndef SGD_H 
 #define SGD_H
 
-#include "layers/denseLayer.hpp"
 #include "optimisers/optimiser.hpp"
+#include "layers/denseLayer.hpp"
 
 // Stochastic Gradient Descent
 class SGDOptimiser : public Optimiser {
-	const double stepSize;
 public:
 	SGDOptimiser(double stepSize = 0.001);
 
 	void Update(DenseLayer& denseLayer);
+
+private:
+	const double stepSize;
 };
 
 #endif

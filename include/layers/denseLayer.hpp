@@ -14,10 +14,6 @@ struct WeightBias {
 };
 
 class DenseLayer : public Layer {
-	int inputDim, outputDim;
-	WeightBias parameters;
-	WeightBias gradients;
-
 public:
 	DenseLayer(int inputDim, int outputDim);
 
@@ -41,6 +37,11 @@ public:
 	int GetOutputDim() const {
 		return outputDim;
 	}
+
+private:
+	int inputDim, outputDim;
+	WeightBias parameters;
+	WeightBias gradients;
 };
 
 #endif

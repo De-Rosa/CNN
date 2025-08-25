@@ -1,4 +1,5 @@
 #include "layers/poolingLayer.hpp"
+
 #include <stdexcept>
 
 MaxPoolingLayer::MaxPoolingLayer(int size, int stride)

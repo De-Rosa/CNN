@@ -1,4 +1,5 @@
 #include "network.hpp"
+
 #include <memory>
 
 Network::Network(Layers&& layers)

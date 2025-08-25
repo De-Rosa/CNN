@@ -1,4 +1,5 @@
 #include "layers/softmaxLayer.hpp"
+
 #include <cmath>
 
 using Array = Eigen::ArrayXXd;

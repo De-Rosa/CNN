@@ -16,7 +16,7 @@ list(REMOVE_ITEM SRC_FILES ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp)
 
 add_library(lib ${SRC_FILES})
 
-add_executable(cnn src/main.cpp ${SRC_FILES})
+add_executable(cnn src/main.cpp)
 target_link_libraries(cnn PRIVATE lib)
 
 include(FetchContent)
