@@ -3,6 +3,13 @@
 
 WeightBias::WeightBias() = default;
 
+WeightBias::WeightBias(Matrix&& w, Matrix&& b)
+        : weights(std::move(w))
+        , biases(std::move(b))
+{
+    if (weights.cols() != biases.cols() || biases.rows() != 1) throw std::runtime_error("initialising WeightBias with invalid matrix sizes");
+};
+
 WeightBias::WeightBias(int inputDim, int outputDim, double initValue)
 {
     if (inputDim <= 0 || outputDim <= 0) throw std::runtime_error("invalid dimensions");
@@ -21,9 +28,12 @@ DenseLayer::DenseLayer(int inputDim, int outputDim)
 
 Matrix DenseLayer::FeedForward(Matrix& mat) {
     Matrix z = mat * parameters.weights;
-    Matrix biases_replicated = parameters.biases.replicate(mat.rows(), 1);
 
-    return z + biases_replicated;
+    // https://stackoverflow.com/questions/35280290/replicate-a-column-vectorxd-in-order-to-construct-a-matrixxd-in-eigen-c
+    // z is of size (samples, outputDim) so we need to replicate across the samples dimension for addition
+    Matrix replicatedBiases = parameters.biases.replicate(mat.rows(), 1);
+
+    return z + replicatedBiases;
 };
 
 Matrix DenseLayer::FeedBackward(Matrix& mat, Matrix& grad) {
@@ -41,3 +51,8 @@ void DenseLayer::ZeroGradients() {
     gradients.weights.setZero();
     gradients.biases.setZero();
 };
+
+void DenseLayer::UpdateParameters(const WeightBias& update) {
+    parameters.weights -= update.weights;
+    parameters.biases -= update.biases;
+}

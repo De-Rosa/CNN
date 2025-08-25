@@ -9,6 +9,7 @@ struct WeightBias {
 	Matrix biases;
 
 	WeightBias();
+	WeightBias(Matrix&& weights, Matrix&& biases);
 	WeightBias(int inputDim, int outputDim, double initValue);
 };
 
@@ -26,20 +27,18 @@ public:
 	void Optimise(Optimiser& optimiser) override;
 
 	void ZeroGradients() override;
+	
+	void UpdateParameters(const WeightBias& update);
 
-	WeightBias& GetParameters() {
-		return parameters;
-	}
-
-	WeightBias& GetGradients() {
+	const WeightBias& GetGradients() const {
 		return gradients;
 	}
 
-	int GetInputDim() {
+	int GetInputDim() const {
 		return inputDim;
 	}
 
-	int GetOutputDim() {
+	int GetOutputDim() const {
 		return outputDim;
 	}
 };

@@ -5,9 +5,13 @@ SGDOptimiser::SGDOptimiser(double stepSize)
 {}
 
 void SGDOptimiser::Update(DenseLayer& denseLayer) {
-    WeightBias& parameters = denseLayer.GetParameters();
-    WeightBias& grads = denseLayer.GetGradients();
+    const WeightBias& grads = denseLayer.GetGradients();
 
-    parameters.weights -= stepSize * grads.weights;
-    parameters.biases -= stepSize * grads.biases;
+    // constructor for WeightBias takes rvalues (weightUpdate, biasUpdate)
+    WeightBias update {
+        stepSize * grads.weights,
+        stepSize * grads.biases
+    };
+
+    denseLayer.UpdateParameters(update);
 }

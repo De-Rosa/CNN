@@ -18,8 +18,7 @@ AdamState& AdamOptimiser::GetState(DenseLayer& denseLayer) {
 
 // https://optimization.cbe.cornell.edu/index.php?title=Adam
 void AdamOptimiser::Update(DenseLayer& denseLayer) {
-    WeightBias& parameters = denseLayer.GetParameters();
-    WeightBias& grads = denseLayer.GetGradients();
+    const WeightBias& grads = denseLayer.GetGradients();
 
     AdamState& state = GetState(denseLayer);
 
@@ -44,9 +43,11 @@ void AdamOptimiser::Update(DenseLayer& denseLayer) {
     Matrix corr_vw = state.v.weights / (1.0 - std::pow(decay2, time));
     Matrix corr_vb = state.v.biases  / (1.0 - std::pow(decay2, time));
 
-    // Update parameters
-    parameters.weights -= stepSize *
-            (corr_mw.array() / (corr_vw.array().sqrt() + epsilon)).matrix();
-    parameters.biases  -= stepSize *
-            (corr_mb.array() / (corr_vb.array().sqrt() + epsilon)).matrix();
+    // constructor for WeightBias takes rvalues: (weightUpdate, biasUpdate)
+    WeightBias update {
+        stepSize * (corr_mw.array() / (corr_vw.array().sqrt() + epsilon)).matrix(),
+        stepSize * (corr_mb.array() / (corr_vb.array().sqrt() + epsilon)).matrix()
+    };
+
+    denseLayer.UpdateParameters(update);
 };
