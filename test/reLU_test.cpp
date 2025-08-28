@@ -9,25 +9,25 @@ Eigen::MatrixXd generateReLUTestMatrix() {
 }
 
 TEST(ReLUForwardPass, PositiveAndNegativeValues) {
-	Eigen::MatrixXd mat = generateReLUTestMatrix();
+	Matrix mat = generateReLUTestMatrix();
 
 	ReLULayer layer;
-	Eigen::MatrixXd result = layer.FeedForward(mat);
+	Matrix result = layer.FeedForward(mat);
 
-	Eigen::MatrixXd expected(2, 2);
+	Matrix expected(2, 2);
 	expected << 3, 0, 0, 0;
 
 	ASSERT_TRUE(result.isApprox(expected));
 };
 
 TEST(ReLUBackwardPass, PositiveAndNegativeValues) {
-	Eigen::MatrixXd mat = generateReLUTestMatrix();
-	Eigen::MatrixXd grad(2,2);
+	Matrix mat = generateReLUTestMatrix();
+	Matrix grad(2,2);
 	grad << 1, 1, 1, 1;
 
 	ReLULayer layer;
-	Eigen::MatrixXd result = layer.FeedBackward(mat, grad); 
-	Eigen::MatrixXd expected(2, 2);
+	Matrix result = layer.FeedBackward(mat, grad); 
+	Matrix expected(2, 2);
 	expected << 1, 0, 0, 0;
 
 	ASSERT_TRUE(result.isApprox(expected));
