@@ -3,10 +3,16 @@
 
 #include "layers/layer.hpp"
 
-class ConvLayer : public Layer {
+class ConvLayer : public Layer3D {
 public:
-	Matrix FeedForward(const Matrix& mat) const;
-	Matrix FeedBackward(const Matrix& mat, const Matrix& grad);
+	ConvLayer(int channelCount, int filterCount, int filterSize, int stride);
+
+	Matrix3D FeedForward(const Matrix3D& mat) const;
+	Matrix3D FeedBackward(const Matrix3D& mat, const Matrix3D& grad);
+
+private:
+	const int channelCount, stride;
+    const std::vector<Matrix3D> filters;
 };
 
 #endif

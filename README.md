@@ -1,5 +1,6 @@
 # CNN
 ## Building
+This project uses Eigen for its matrix operations, where the headers can be installed to `include/Eigen`.\
 In the `build` directory, run:
 ```
 cmake ..

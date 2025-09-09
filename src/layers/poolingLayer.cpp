@@ -1,12 +1,11 @@
 #include "layers/poolingLayer.hpp"
+#include "utils.hpp"
 
 #include <stdexcept>
 
 Matrix MaxPoolingForward(const Matrix& mat, int size, int stride) {
-	// no padding, will cut off edges (valid pooling)
-	int outputHeight = ((mat.rows() - size) / stride) + 1;
-	int outputWidth = ((mat.cols() - size) / stride) + 1;
-
+	// valid pooling 
+	auto [outputHeight, outputWidth] = ComputeDimsKernelValid(mat, size, stride); 
 	Matrix outputMatrix(outputHeight, outputWidth);
 
 	for (int h = 0; h < outputHeight; ++h) {

@@ -1,6 +1,5 @@
 #include "optimisers/adam.hpp"
 
-#include <algorithm>
 #include <cmath>
 
 AdamState::AdamState(int inputDim, int outputDim)
@@ -23,7 +22,7 @@ void AdamOptimiser::Update(DenseLayer& denseLayer) {
 
     AdamState& state = GetState(denseLayer);
 
-    time++;
+    ++time;
 
     // momentum
     state.m.weights = decay1 * state.m.weights +
@@ -52,3 +51,4 @@ void AdamOptimiser::Update(DenseLayer& denseLayer) {
 
     denseLayer.UpdateParameters(update);
 };
+

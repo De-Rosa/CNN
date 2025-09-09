@@ -3,7 +3,6 @@
 
 #include <memory>
 
-#include "hyperparameters.hpp"
 #include "layers/layer.hpp"
 #include "optimisers/optimiser.hpp"
 

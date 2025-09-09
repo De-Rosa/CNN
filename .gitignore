@@ -1,2 +1,4 @@
 include/Eigen
+.cache/
+*/.DS_Store
 build/*
